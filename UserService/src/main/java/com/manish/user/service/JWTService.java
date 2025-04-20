@@ -10,10 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
 @Service
@@ -25,6 +22,25 @@ public class JWTService {
     public static String getSubjectFromToken(String token){
         log.info("|| called getSubjectFromToken from JwtService with token : {} ||", token);
         return getClaimFromToken(token, Claims::getSubject);
+    }
+
+    public static Set<String> getRolesFromToken(String token) {
+        log.info("|| called getRolesFromToken from JwtService with token : {} ||", token);
+        Claims claims = getAllClaimsFromToken(token);
+        try {
+            Object rolesObj = claims.get("roles");
+            if (rolesObj instanceof Set) {
+                return (Set<String>) rolesObj;
+            } else if (rolesObj instanceof java.util.List) {
+                return new HashSet<>((List<String>) rolesObj);
+            }
+            log.warn("Roles claim is neither Set nor List. Type: {}",
+                    rolesObj != null ? rolesObj.getClass().getName() : "null");
+            return new HashSet<>();
+        } catch (Exception e) {
+            log.error("Error extracting roles from token: {}", e.getMessage());
+            return new HashSet<>();
+        }
     }
 
     public static <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver){

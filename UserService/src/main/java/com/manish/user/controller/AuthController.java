@@ -40,9 +40,9 @@ public class AuthController {
     }
 
     @GetMapping("/api/v1/auth/validate-user")
-    public ResponseEntity<ValidateUserResponseDTO> validateUser(@RequestParam String token){
-        log.info("Received request to validate user with token: {}", token);
-        return new ResponseEntity<>(authService.validateUser(token), HttpStatus.OK);
+    public ResponseEntity<ValidateUserResponseDTO> validateUser(@RequestParam String token, @RequestParam String path){
+        log.info("Received request to validate user with token: {} and path {}", token, path);
+        return new ResponseEntity<>(authService.validateUser(token, path), HttpStatus.OK);
     }
 
     @GetMapping("/api/v1/auth/health-check")
