@@ -11,6 +11,7 @@
     <modules>
         <module>UserService</module>
         <module>Common</module>
+        <module>SchoolService</module>
     </modules>
 
     <parent>

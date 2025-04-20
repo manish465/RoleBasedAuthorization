@@ -1,4 +1,4 @@
-package com.manish.user;
+package com.manish.school;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
