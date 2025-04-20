@@ -1,0 +1,7 @@
+server:
+  port: 9020
+
+logging:
+  level:
+    com.manish: DEBUG
+    org.springframework.security: INFO
