@@ -3,8 +3,6 @@ package com.manish.user.validate;
 import com.manish.common.request.AddUserRequestDTO;
 import com.manish.common.request.UpdateUserRequestDTO;
 import com.manish.common.util.RegexpUtil;
-import com.manish.user.dao.RoleDAO;
-import com.manish.user.dao.UserDAO;
 import com.manish.user.exception.ApplicationException;
 import com.manish.common.util.SetUtil;
 import com.manish.common.util.StringUtil;
@@ -13,7 +11,6 @@ import com.manish.user.model.UserModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -21,10 +18,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class UserValidate {
-    private final UserDAO userDAO;
-    private final RoleDAO roleDAO;
-
-    public void validateAddUserRequestDTO(AddUserRequestDTO addUserRequestDTO) {
+    public void validateAddUserRequestDTO(AddUserRequestDTO addUserRequestDTO, Optional<UserModel> optionalUserModel, Set<RoleModel> roleModels) {
         if (StringUtil.isEmpty(addUserRequestDTO.getFirstName())) {
             throw new ApplicationException("First name cannot be empty");
         }
@@ -46,14 +40,14 @@ public class UserValidate {
         if (StringUtil.isEmpty(addUserRequestDTO.getPassword())) {
             throw new ApplicationException("Password cannot be empty");
         }
-        if (!SetUtil.isEmpty(addUserRequestDTO.getRoles())) {
-            throw new ApplicationException("Roles cannot be empty");
-        }
-        if(userDAO.findByEmail(addUserRequestDTO.getEmail()).isEmpty()) {
+        if(optionalUserModel.isEmpty()) {
             throw new ApplicationException("Email already exists");
         }
+        if (!SetUtil.isEmpty(optionalUserModel.get().getRoles())) {
+            throw new ApplicationException("Roles cannot be empty");
+        }
 
-        validateRoles(addUserRequestDTO.getRoles(), new HashSet<>(roleDAO.findAll()));
+        validateRoles(addUserRequestDTO.getRoles(), roleModels);
     }
 
     public void validateUser(String userId, Optional<UserModel> optionalUserModel) {
@@ -74,9 +68,6 @@ public class UserValidate {
         }
         if (StringUtil.isEmpty(updateUserRequestDTO.getLastName())) {
             throw new ApplicationException("Last name cannot be empty");
-        }
-        if(userDAO.findById(updateUserRequestDTO.getUserID()).isEmpty()) {
-            throw new ApplicationException("Email already exists");
         }
         if(optionalUserModel.isEmpty()){
             throw new ApplicationException("User not found with ID: " + updateUserRequestDTO.getUserID());

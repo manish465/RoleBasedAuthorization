@@ -14,8 +14,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -30,7 +32,10 @@ public class UserService {
         log.info("Received request to add user: {}", addUserRequestDTO);
 
         Set<RoleModel> existingRoles = roleDAO.findByRoleNameIn(addUserRequestDTO.getRoles());
-        userValidate.validateAddUserRequestDTO(addUserRequestDTO);
+        Set<RoleModel> allRoles = new HashSet<>(roleDAO.findAll());
+        Optional<UserModel> optionalUserModel = userDAO.findByEmail(addUserRequestDTO.getEmail());
+
+        userValidate.validateAddUserRequestDTO(addUserRequestDTO, optionalUserModel, allRoles);
         UserModel savedUser = userDAO.save(userMapper.toEntity(addUserRequestDTO, existingRoles));
 
         return new GeneralMessageResponseDTO("User added successfully with userID : " + savedUser.getUserID());
