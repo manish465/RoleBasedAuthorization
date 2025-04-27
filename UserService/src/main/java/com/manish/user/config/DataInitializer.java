@@ -39,17 +39,8 @@ public class DataInitializer implements CommandLineRunner {
         rolePathMap = new HashMap<>();
         rolePathMap.put("ADMIN",
                 Set.of(
-                        "/api/v1/users/add-user",
-                        "/api/v1/users/get-user",
                         "/api/v1/users/update-user",
                         "/api/v1/users/delete-user",
-                        "/api/v1/users/delete-all-users",
-                        "/api/v1/users/health-check",
-                        "/api/v1/auth/sign-up",
-                        "/api/v1/auth/sign-in",
-                        "/api/v1/auth/create-jwt",
-                        "/api/v1/auth/validate-user",
-                        "/api/v1/auth/health-check",
                         "/api/v1/school/get-admin",
                         "/api/v1/school/get-management",
                         "/api/v1/school/get-teacher",
@@ -60,16 +51,8 @@ public class DataInitializer implements CommandLineRunner {
 
         rolePathMap.put("MANAGMENT",
                 Set.of(
-                        "/api/v1/users/add-user",
-                        "/api/v1/users/get-user",
                         "/api/v1/users/update-user",
                         "/api/v1/users/delete-user",
-                        "/api/v1/users/health-check",
-                        "/api/v1/auth/sign-up",
-                        "/api/v1/auth/sign-in",
-                        "/api/v1/auth/create-jwt",
-                        "/api/v1/auth/validate-user",
-                        "/api/v1/auth/health-check",
                         "/api/v1/school/get-management",
                         "/api/v1/school/get-teacher",
                         "/api/v1/school/get-student",
@@ -79,16 +62,8 @@ public class DataInitializer implements CommandLineRunner {
 
         rolePathMap.put("TEACHER",
                 Set.of(
-                        "/api/v1/users/add-user",
-                        "/api/v1/users/get-user",
                         "/api/v1/users/update-user",
                         "/api/v1/users/delete-user",
-                        "/api/v1/users/health-check",
-                        "/api/v1/auth/sign-up",
-                        "/api/v1/auth/sign-in",
-                        "/api/v1/auth/create-jwt",
-                        "/api/v1/auth/validate-user",
-                        "/api/v1/auth/health-check",
                         "/api/v1/school/get-teacher",
                         "/api/v1/school/get-student",
                         "/api/v1/school/get-guest"
@@ -97,28 +72,12 @@ public class DataInitializer implements CommandLineRunner {
 
         rolePathMap.put("STUDENT",
                 Set.of(
-                        "/api/v1/users/add-user",
-                        "/api/v1/users/get-user",
-                        "/api/v1/users/health-check",
-                        "/api/v1/auth/sign-up",
-                        "/api/v1/auth/sign-in",
-                        "/api/v1/auth/create-jwt",
-                        "/api/v1/auth/validate-user",
-                        "/api/v1/auth/health-check",
                         "/api/v1/school/get-student"
                 )
         );
 
         rolePathMap.put("GUEST",
                 Set.of(
-                        "/api/v1/users/add-user",
-                        "/api/v1/users/get-user",
-                        "/api/v1/users/health-check",
-                        "/api/v1/auth/sign-up",
-                        "/api/v1/auth/sign-in",
-                        "/api/v1/auth/create-jwt",
-                        "/api/v1/auth/validate-user",
-                        "/api/v1/auth/health-check",
                         "/api/v1/school/get-guest"
                 )
         );
