@@ -67,7 +67,7 @@ public class UserService {
         Optional<UserModel> exitingUserModelOptional = userDAO.findById(userId);
         userValidate.validateUser(userId, exitingUserModelOptional);
 
-        userDAO.delete(exitingUserModelOptional.get());
+        userDAO.deleteById(exitingUserModelOptional.get().getUserID());
 
         return new GeneralMessageResponseDTO("User deleted successfully with userID : " + userId);
     }

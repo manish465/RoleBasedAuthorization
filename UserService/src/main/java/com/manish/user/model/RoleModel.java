@@ -31,6 +31,12 @@ public class RoleModel {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
+    public RoleModel(String roleName) {
+        this.roleName = roleName;
+        permissions = new HashSet<>();
+        createdAt = LocalDateTime.now();
+    }
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
