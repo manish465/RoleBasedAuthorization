@@ -35,10 +35,14 @@ services:
       - postgres
 
   kong:
-    image: kong:latest
+    build:
+      context: ./ApiGateway
+      dockerfile: Dockerfile
     container_name: kong-gateway
     environment:
       KONG_DATABASE: 'off'
+      KONG_PLUGINS: bundled,auth-check
+      KONG_LUA_PACKAGE_PATH: /usr/local/share/lua/5.1/?.lua;;
       KONG_DECLARATIVE_CONFIG: /etc/kong/kong.yml
       KONG_PROXY_ACCESS_LOG: /dev/stdout
       KONG_ADMIN_ACCESS_LOG: /dev/stdout
