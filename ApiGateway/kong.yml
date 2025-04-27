@@ -54,3 +54,4 @@ services:
             - Authorization
           credentials: true
           max_age: 3600
+          
