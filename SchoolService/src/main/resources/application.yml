@@ -1,6 +1,10 @@
 server:
   port: 9020
 
+spring:
+  application:
+    name: school-service
+
 logging:
   level:
     com.manish: DEBUG
