@@ -4,7 +4,6 @@ import com.manish.common.request.AddUserRequestDTO;
 import com.manish.common.request.UpdateUserRequestDTO;
 import com.manish.common.util.RegexpUtil;
 import com.manish.user.exception.ApplicationException;
-import com.manish.common.util.SetUtil;
 import com.manish.common.util.StringUtil;
 import com.manish.user.model.RoleModel;
 import com.manish.user.model.UserModel;
@@ -28,23 +27,17 @@ public class UserValidate {
         if (StringUtil.isEmpty(addUserRequestDTO.getEmail())) {
             throw new ApplicationException("Email cannot be empty");
         }
+        if (StringUtil.isEmpty(addUserRequestDTO.getUsername())) {
+            throw new ApplicationException("Username cannot be empty");
+        }
         if (!RegexpUtil.isEmailValid(addUserRequestDTO.getEmail())) {
             throw new ApplicationException("Invalid email format");
         }
         if (!RegexpUtil.isPasswordValid(addUserRequestDTO.getPassword())) {
             throw new ApplicationException("Invalid password format");
         }
-        if (StringUtil.isEmpty(addUserRequestDTO.getUsername())) {
-            throw new ApplicationException("Username cannot be empty");
-        }
-        if (StringUtil.isEmpty(addUserRequestDTO.getPassword())) {
-            throw new ApplicationException("Password cannot be empty");
-        }
-        if(optionalUserModel.isEmpty()) {
+        if(optionalUserModel.isPresent()) {
             throw new ApplicationException("Email already exists");
-        }
-        if (!SetUtil.isEmpty(optionalUserModel.get().getRoles())) {
-            throw new ApplicationException("Roles cannot be empty");
         }
 
         validateRoles(addUserRequestDTO.getRoles(), roleModels);
@@ -75,15 +68,15 @@ public class UserValidate {
     }
 
     public void validateRoles(Set<String> requestedRoles, Set<RoleModel> existingRoles) {
-        if (existingRoles.size() != requestedRoles.size()) {
-            Set<String> foundRoleNames = existingRoles.stream()
-                    .map(RoleModel::getRoleName)
-                    .collect(Collectors.toSet());
+        Set<String> foundRoleNames = existingRoles.stream()
+                .map(RoleModel::getRoleName)
+                .collect(Collectors.toSet());
 
-            Set<String> notFoundRoles = requestedRoles.stream()
-                    .filter(role -> !foundRoleNames.contains(role))
-                    .collect(Collectors.toSet());
+        Set<String> notFoundRoles = requestedRoles.stream()
+                .filter(role -> !foundRoleNames.contains(role))
+                .collect(Collectors.toSet());
 
+        if(!notFoundRoles.isEmpty()) {
             throw new ApplicationException("Some roles do not exist: " + notFoundRoles);
         }
     }

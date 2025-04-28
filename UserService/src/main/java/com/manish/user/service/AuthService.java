@@ -15,6 +15,7 @@ import com.manish.user.validate.AuthValidate;
 import com.manish.user.validate.UserValidate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -30,18 +31,19 @@ public class AuthService {
     private final UserDAO userDAO;
     private final RoleDAO roleDAO;
     private final PermissionDAO permissionDAO;
+    private final PasswordEncoder passwordEncoder;
 
     public SignInResponseDTO signIn(SignInRequestDTO signInRequestDTO) {
         log.info("Received request to sign in user: {}", signInRequestDTO);
 
-        UserModel userModel = authValidate.validateSignInRequestDTO(signInRequestDTO);
+        Optional<UserModel> userModelOptional = userDAO.findByEmail(signInRequestDTO.getEmail());
 
-
+        authValidate.validateSignInRequestDTO(signInRequestDTO, passwordEncoder, userModelOptional);
 
         return SignInResponseDTO.builder()
-                .userID(userModel.getUserID())
-                .token(JWTService.generateToken(userModel.getUserID(), userModel.getRoles().stream().map(RoleModel::getRoleName).collect(Collectors.toSet())))
-                .roles(userModel.getRoles().stream().map(RoleModel::getRoleName).collect(Collectors.toSet()))
+                .userID(userModelOptional.get().getUserID())
+                .token(JWTService.generateToken(userModelOptional.get().getUserID(), userModelOptional.get().getRoles().stream().map(RoleModel::getRoleName).collect(Collectors.toSet())))
+                .roles(userModelOptional.get().getRoles().stream().map(RoleModel::getRoleName).collect(Collectors.toSet()))
                 .build();
     }
 
