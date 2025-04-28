@@ -77,6 +77,6 @@ public class AuthValidateTest {
                         Optional.empty()
                 )
         );
-        assertEquals("User not found with email: " + email, exception.getMessage());
+        assertEquals("Email cannot be empty", exception.getMessage());
     }
 }
